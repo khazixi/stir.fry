@@ -1,24 +1,83 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+addEventListener('popstate', () => {
+  const params = new URLSearchParams(document.location.search)
 
-setupCounter(document.querySelector('#counter'))
+  if (params.toString() === '') renderRoot()
+  else renderItems(params)
+})
+
+/** @param {SubmitEvent} event */
+function handleSubmission(event) {
+  const fd = new FormData(event.target)
+  const params = new URLSearchParams(fd)
+
+  renderItems(params)
+  history.pushState({}, "", params.toString())
+
+  event.preventDefault()
+}
+
+/** @param {URLSearchParams} params */
+function renderItems(params) {
+  const app = document.querySelector('#app')
+
+  const noodle = params.get('noodle')
+  const spicy = (params.get('spicy') === 'on') ? "spicy" : "no spicy"
+  const meat = params.get('meat')
+
+  app.innerHTML = `<h1>Options</h1>`
+
+  app.insertAdjacentHTML('beforeend', `<p>${noodle}</p>`)
+  app.insertAdjacentHTML('beforeend', `<p>${spicy}</p>`)
+  app.insertAdjacentHTML('beforeend', `<p>${meat}</p>`)
+}
+
+function renderRoot() {
+  document.querySelector('#app').innerHTML = `
+    <form>
+      <h1> Stir.fry </h1>
+      <fieldset>
+        <legend>Noodles</legend>
+        <input type="radio" name="noodle" value="noodleless" >
+        <label for="noodleless"> No Noodles </label>
+        <br>
+        <input type="radio" name="noodle" value="white">
+        <label for="white"> White Noodles </label>
+        <br>
+        <input type="radio" name="noodle" value="yellow" >
+        <label for="yellow"> Lo Mein Noodles </label>
+      </fieldset>
+
+      <fieldset>
+        <legend> Spicy </legend>
+        <input type="checkbox" name="spicy">
+        <label for="spicy"> Spicy </label>
+        <br>
+      </fieldset>
+
+      <fieldset>
+        <legend> Meat </legend>
+        <input type="radio" name="meat" value="meatless" >
+        <label for="meatless"> No Meat </label>
+        <br>
+        <input type="radio" name="meat" value="tofu">
+        <label for="tofu"> Tofu </label>
+        <br>
+        <input type="radio" name="meat" value="chicken">
+        <label for="chicken"> Chicken </label>
+        <br>
+        <input type="radio" name="meat" value="beef" >
+        <label for="beef"> Beef </label>
+      </fieldset>
+
+      <button type="submit"> Submit </button>
+    </form>
+  `
+
+  document.querySelector('form').addEventListener('submit', handleSubmission)
+
+  history.pushState({}, "", "/")
+}
+
+renderRoot()
