@@ -77,7 +77,7 @@ function renderRoot() {
 
   document.querySelector('form').addEventListener('submit', handleSubmission)
 
-  history.pushState({}, "", "/")
+  history.replaceState({}, "", "/")
 }
 
 function router() {
