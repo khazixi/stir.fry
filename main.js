@@ -3,7 +3,7 @@ import './style.css'
 addEventListener('popstate', () => {
   const params = new URLSearchParams(document.location.search)
 
-  if (params.toString() === '') renderRoot()
+  if (params.size === 0) renderRoot()
   else renderItems(params)
 })
 
@@ -13,7 +13,7 @@ function handleSubmission(event) {
   const params = new URLSearchParams(fd)
 
   renderItems(params)
-  history.pushState({}, "", params.toString())
+  history.pushState({}, "", '?' + params.toString())
 
   event.preventDefault()
 }
@@ -80,4 +80,11 @@ function renderRoot() {
   history.pushState({}, "", "/")
 }
 
-renderRoot()
+function router() {
+  const params = new URLSearchParams(document.location.search)
+
+  if (params.size === 0) renderRoot()
+  else renderItems(params)
+}
+
+router()
