@@ -1,4 +1,4 @@
-import './style.css'
+// import './style.css'
 
 addEventListener('popstate', () => {
   const params = new URLSearchParams(document.location.search)
