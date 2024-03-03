@@ -1,5 +1,17 @@
 // import './style.css'
 
+import Chicken from '/chicken.svg'
+import Cow from '/cow.svg'
+import Tofu from '/tofu.svg'
+import NoMeat from '/no-meat.svg'
+
+import Spicy from '/spicy.svg'
+import NoSpicy from '/no-spicy.svg'
+
+import WhiteNoodle from '/white-noodle.svg'
+import YellowNoodle from '/yellow-noodle.svg'
+import NoNoodle from '/no-noodle.svg'
+
 addEventListener('popstate', () => {
   const params = new URLSearchParams(document.location.search)
 
@@ -22,15 +34,35 @@ function handleSubmission(event) {
 function renderItems(params) {
   const app = document.querySelector('#app')
 
+  let noodleImg
+  let meatImg
+
   const noodle = params.get('noodle')
   const spicy = (params.get('spicy') === 'on') ? "spicy" : "no spicy"
+  const spicyImg = (params.get('spicy') === 'on') ? Spicy : NoSpicy
   const meat = params.get('meat')
+
+  if (noodle === 'white') {
+    noodleImg = WhiteNoodle
+  } else if (noodle === 'yellow') {
+    noodleImg = YellowNoodle
+  } else {
+    noodleImg = NoNoodle
+  }
+
+  if (meat === 'chicken') {
+    meatImg = Chicken
+  } else if (meat === 'beef') {
+    meatImg = Cow
+  } else {
+    meatImg = NoMeat
+  }
 
   app.innerHTML = `<h1>Options</h1>`
 
-  app.insertAdjacentHTML('beforeend', `<p>${noodle}</p>`)
-  app.insertAdjacentHTML('beforeend', `<p>${spicy}</p>`)
-  app.insertAdjacentHTML('beforeend', `<p>${meat}</p>`)
+  app.insertAdjacentHTML('beforeend', `<img src="${meatImg}" alt="Some Meat">`)
+  app.insertAdjacentHTML('beforeend', `<img src="${spicyImg}" alt="${spicy}">`)
+  app.insertAdjacentHTML('beforeend', `<img src="${noodleImg}" alt="Some Noodle">`)
 }
 
 function renderRoot() {
